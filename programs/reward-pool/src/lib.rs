@@ -3,7 +3,7 @@ use std::convert::TryInto;
 use std::fmt::Debug;
 
 use anchor_lang::prelude::*;
-use anchor_lang::solana_program::{clock, program_option::COption, sysvar};
+use anchor_lang::solana_program::{clock, program::invoke_signed, program_option::COption, sysvar};
 use anchor_spl::token::{self, Mint, Token, TokenAccount};
 
 use crate::calculator::*;
@@ -12,6 +12,8 @@ use crate::version::*;
 
 mod calculator;
 mod version;
+#[cfg(test)]
+mod math;
 
 #[cfg(not(feature = "test-id"))]
 declare_id!("SRwd1XTVscKXu9nMU8f6MfEf9cAzGPmbMe69CFmHvAH");
@@ -139,7 +141,7 @@ pub mod reward_pool {
         user.reward_a_per_token_pending = 0;
         user.reward_b_per_token_pending = 0;
         user.balance_staked = 0;
-        user.nonce = *ctx.bumps.get("user").unwrap();
+        user.nonce = ctx.bumps.user;
 
         let pool = &mut ctx.accounts.pool;
         pool.user_stake_count = pool.user_stake_count.checked_add(1).unwrap();
@@ -475,7 +477,7 @@ pub mod reward_pool {
             &[ctx.accounts.pool_signer.key],
             ctx.accounts.staking_vault.amount,
         )?;
-        solana_program::program::invoke_signed(
+        invoke_signed(
             &ix,
             &[
                 ctx.accounts.token_program.to_account_info(),
@@ -492,7 +494,7 @@ pub mod reward_pool {
             ctx.accounts.pool_signer.key,
             &[ctx.accounts.pool_signer.key],
         )?;
-        solana_program::program::invoke_signed(
+        invoke_signed(
             &ix,
             &[
                 ctx.accounts.token_program.to_account_info(),
@@ -512,7 +514,7 @@ pub mod reward_pool {
             &[ctx.accounts.pool_signer.key],
             ctx.accounts.reward_a_vault.amount,
         )?;
-        solana_program::program::invoke_signed(
+        invoke_signed(
             &ix,
             &[
                 ctx.accounts.token_program.to_account_info(),
@@ -529,7 +531,7 @@ pub mod reward_pool {
             ctx.accounts.pool_signer.key,
             &[ctx.accounts.pool_signer.key],
         )?;
-        solana_program::program::invoke_signed(
+        invoke_signed(
             &ix,
             &[
                 ctx.accounts.token_program.to_account_info(),
@@ -550,7 +552,7 @@ pub mod reward_pool {
                 &[ctx.accounts.pool_signer.key],
                 ctx.accounts.reward_b_vault.amount,
             )?;
-            solana_program::program::invoke_signed(
+            invoke_signed(
                 &ix,
                 &[
                     ctx.accounts.token_program.to_account_info(),
@@ -567,7 +569,7 @@ pub mod reward_pool {
                 ctx.accounts.pool_signer.key,
                 &[ctx.accounts.pool_signer.key],
             )?;
-            solana_program::program::invoke_signed(
+            invoke_signed(
                 &ix,
                 &[
                     ctx.accounts.token_program.to_account_info(),
@@ -659,6 +661,7 @@ pub struct CreateUser<'info> {
     #[account(
         init,
         payer = owner,
+        space = 8 + std::mem::size_of::<User>(),
         seeds = [
             owner.key.as_ref(),
             pool.to_account_info().key.as_ref()
@@ -666,6 +669,7 @@ pub struct CreateUser<'info> {
         bump,
     )]
     user: Box<Account<'info, User>>,
+    #[account(mut)]
     owner: Signer<'info>,
     // Misc.
     system_program: Program<'info, System>,
@@ -1007,7 +1011,7 @@ pub struct User {
     pub nonce: u8,
 }
 
-#[error]
+#[error_code]
 pub enum ErrorCode {
     #[msg("Insufficient funds to unstake.")]
     InsufficientFundUnstake,

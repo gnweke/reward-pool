@@ -1,0 +1,29 @@
+name: CI
+on: [push, pull_request]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions-rs/toolchain@v1
+        with:
+          toolchain: 1.83.0
+          override: true
+      - name: Install Solana
+        run: sh -c "$(curl -sSfL https://release.anza.xyz/stable/install)"
+      - name: Install Anchor CLI
+        run: cargo install --locked anchor-cli@0.31.1
+      - name: Install JS deps
+        run: npm install
+      - name: Versions
+        run: |
+          rustc --version
+          cargo --version
+          solana --version
+          anchor --version
+      - name: Build
+        run: anchor build -p reward_pool -- --features local-testing,test-id
+      - name: Unit Tests
+        run: cargo test -p reward-pool
+      - name: Integration Tests
+        run: anchor test -p reward_pool --skip-build -- --features local-testing,test-id

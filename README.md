@@ -20,10 +20,50 @@ Program for staking and receiving rewards.
 
 - **This code is unaudited. Use at your own risk.**
 
+## Local Dev Quickstart (macOS & Ubuntu)
+```bash
+# Toolchains
+rustup default 1.83.0
+sh -c "$(curl -sSfL https://release.anza.xyz/stable/install)"
+cargo install --git https://github.com/coral-xyz/anchor avm --force
+avm install 0.31.1 && avm use 0.31.1
+npm i -g yarn
+
+# Smoke test
+solana-test-validator -r &
+sleep 5
+solana config set -ul
+solana airdrop 2
+
+# Program
+anchor build -p reward_pool -- --features local-testing,test-id
+anchor test -p reward_pool -- --features local-testing,test-id
+
+# Troubleshooting
+cargo tree -p reward-pool -i openssl-sys   # should output nothing
+```
+
 ## Developing
 
 [Anchor](https://github.com/project-serum/anchor) is used for developoment, and it's
 recommended workflow is used here. To get started, see the [guide](https://project-serum.github.io/anchor/getting-started/introduction.html).
+
+### Toolchain
+
+```bash
+rustup default 1.83.0
+cargo install --locked anchor-cli@0.31.1
+sh -c "$(curl -sSfL https://release.solana.com/v2.3.2/install)"
+```
+
+Verify versions:
+
+```bash
+rustc --version
+cargo --version
+anchor --version
+solana --version
+```
 
 ### Build
 
@@ -68,3 +108,35 @@ Note: By default, programs are deployed to accounts that are twice the size of t
 ### Initial Migration
 
 There is no initial migration required with this program.
+
+## Account Map
+
+| Account | PDA seeds | Notes |
+| --- | --- | --- |
+| **Pool signer** | `[pool.key()]` | Authority for staking/reward vaults |
+| **User** | `[owner.key(), pool.key()]` | Tracks stake and reward checkpoints; bump stored in `nonce` |
+| **Vaults** | n/a | Owned by pool signer, close authority = `None` |
+
+## Local Runbook
+
+```
+# start a validator
+solana-test-validator --reset &
+
+# airdrop some SOL
+solana airdrop 10
+
+# build and deploy the program
+anchor build -p reward_pool
+anchor deploy -p reward_pool
+
+# example instruction flow (Anchor scripts)
+anchor run initialize_pool
+anchor run create_user
+anchor run stake
+anchor run fund
+anchor run claim
+anchor run unstake
+```
+
+The `anchor run` scripts are placeholders showing call order; the TypeScript SDK can drive the same instructions.
