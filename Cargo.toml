@@ -2,3 +2,12 @@
 members = [
     "programs/*"
 ]
+
+[profile.release]
+overflow-checks = true
+lto = "thin"
+
+[profile.dev]
+debug = 1
+incremental = true
+

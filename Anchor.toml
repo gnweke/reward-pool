@@ -1,26 +1,10 @@
-anchor_version = "0.21.0"
-
-[workspace]
-members = ["programs/reward-pool"]
-
-[registry]
-url = "https://anchor.projectserum.com"
+[toolchain]
+anchor_version = "0.31.1"
+solana_version = "2.3.0"
 
 [provider]
 cluster = "localnet"
-wallet = "~/.config/solana/id.json"
-
-[scripts]
-test = "mocha -t 1000000 tests/"
+wallet  = "/Users/$(whoami)/.config/solana/id.json"
 
 [programs.localnet]
-reward_pool = "Dev9TukuTHwNmYm2NUcXQ9iuNL8UrP3TnZCj1Y7UjV18"
-
-#[programs.devnet]
-#reward_pool = "Dev9TukuTHwNmYm2NUcXQ9iuNL8UrP3TnZCj1Y7UjV18"
-
-#[programs.testnet]
-#reward_pool = "SRwd1XTVscKXu9nMU8f6MfEf9cAzGPmbMe69CFmHvAH"
-
-#[programs.mainnet]
-#reward_pool = "SRwd1XTVscKXu9nMU8f6MfEf9cAzGPmbMe69CFmHvAH"
+reward_pool = "2ohgosSwjRez2TEHSmAxZEqJATdT2BaP6gXD5GZkDkTm"
