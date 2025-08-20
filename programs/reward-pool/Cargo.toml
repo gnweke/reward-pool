@@ -25,5 +25,6 @@ anchor-spl  = "0.31"
 spl-token   = { version = "4", features = ["no-entrypoint"] }
 spl-math    = { version = "0.1", features = ["no-entrypoint"] }
 base64ct = { version = "1.7.1", default-features = false }
+getrandom = { version = "0.1.16", features = ["dummy"] }
 
 

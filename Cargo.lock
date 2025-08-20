@@ -1377,6 +1377,7 @@ dependencies = [
  "anchor-lang",
  "anchor-spl",
  "base64ct",
+ "getrandom 0.1.16",
  "spl-math",
  "spl-token 4.0.2",
 ]
