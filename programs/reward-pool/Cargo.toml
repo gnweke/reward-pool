@@ -9,22 +9,24 @@ crate-type = ["cdylib", "lib"]
 name = "reward_pool"
 
 [features]
+default = []
 no-entrypoint = []
 cpi = ["no-entrypoint"]
-
-#add to default for local testing
-#default = ["local-testing","test-id"]
-#note, can also use `anchor test -- --feature local-testing,test-id` now
 local-testing = []
 test-id = []
 verbose = []
+custom-heap = []
+custom-panic = []
+anchor-debug = []
+no-log-ix-name = []
+no-idl = []
+idl-build = ["anchor-lang/idl-build", "anchor-spl/idl-build"]
 
 [dependencies]
 anchor-lang = "0.31"
 anchor-spl  = "0.31"
 spl-token   = { version = "4", features = ["no-entrypoint"] }
 spl-math    = { version = "0.1", features = ["no-entrypoint"] }
-base64ct = { version = "1.7.1", default-features = false }
 getrandom = { version = "0.1.16", features = ["dummy"] }
 
 
