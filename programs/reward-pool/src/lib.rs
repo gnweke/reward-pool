@@ -452,6 +452,15 @@ pub mod reward_pool {
     pub fn close_user(ctx: Context<CloseUser>) -> Result<()> {
         let pool = &mut ctx.accounts.pool;
         pool.user_stake_count = pool.user_stake_count.checked_sub(1).unwrap();
+        let dest = ctx.accounts.owner.to_account_info();
+        let user_info = ctx.accounts.user.to_account_info();
+        **dest.lamports.borrow_mut() = dest
+            .lamports()
+            .checked_add(user_info.lamports())
+            .unwrap();
+        **user_info.lamports.borrow_mut() = 0;
+        user_info.assign(&System::id());
+        user_info.resize(0)?;
         Ok(())
     }
 
@@ -581,6 +590,15 @@ pub mod reward_pool {
             )?;
         }
 
+        let dest = ctx.accounts.refundee.to_account_info();
+        let pool_info = ctx.accounts.pool.to_account_info();
+        **dest.lamports.borrow_mut() = dest
+            .lamports()
+            .checked_add(pool_info.lamports())
+            .unwrap();
+        **pool_info.lamports.borrow_mut() = 0;
+        pool_info.assign(&System::id());
+        pool_info.resize(0)?;
         Ok(())
     }
 }
@@ -896,7 +914,6 @@ pub struct CloseUser<'info> {
     pool: Box<Account<'info, Pool>>,
     #[account(
         mut,
-        close = owner,
         has_one = owner,
         has_one = pool,
         seeds = [
@@ -925,7 +942,6 @@ pub struct ClosePool<'info> {
     reward_b_refundee: Box<Account<'info, TokenAccount>>,
     #[account(
         mut,
-        close = refundee,
         has_one = authority,
         has_one = staking_vault,
         has_one = reward_a_vault,

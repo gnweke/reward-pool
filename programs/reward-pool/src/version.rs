@@ -7,7 +7,6 @@ use crate::Pool;
 pub const SECONDS_IN_YEAR: u64 = 365 * 24 * 60 * 60;
 
 #[derive(AnchorSerialize, AnchorDeserialize, Clone, Copy, Debug, PartialEq, Eq)]
-#[cfg_attr(feature = "idl-build", derive(IdlBuild))]
 #[repr(u8)]
 /// A version marker for different logic pertaining to program upgrades
 pub enum PoolVersion {
@@ -16,6 +15,9 @@ pub enum PoolVersion {
     /// a V2 pool uses the rate field as an ANNUAL lamport rate
     V2 = 2,
 }
+
+#[cfg(feature = "idl-build")]
+impl IdlBuild for PoolVersion {}
 
 impl Pool {
     /// Will upgrade the pool if an upgrade is available and able to be done
