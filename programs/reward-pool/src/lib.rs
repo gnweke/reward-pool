@@ -588,7 +588,7 @@ pub mod reward_pool {
 #[derive(Accounts)]
 #[instruction(pool_nonce: u8)]
 pub struct InitializePool<'info> {
-    authority: UncheckedAccount<'info>,
+    authority: Signer<'info>,
 
     #[account(
         mut,
@@ -635,6 +635,7 @@ pub struct InitializePool<'info> {
     )]
     reward_b_vault: Box<Account<'info, TokenAccount>>,
 
+    /// CHECK: pool signer PDA, seeds `[pool]` and `pool_nonce`
     #[account(
         seeds = [
             pool.to_account_info().key.as_ref()
@@ -693,6 +694,7 @@ pub struct Pause<'info> {
     pool: Box<Account<'info, Pool>>,
     authority: Signer<'info>,
 
+    /// CHECK: pool signer PDA, seeds `[pool]` and `pool.nonce`
     #[account(
         seeds = [
             pool.to_account_info().key.as_ref()
@@ -726,6 +728,7 @@ pub struct Unpause<'info> {
     pool: Box<Account<'info, Pool>>,
     authority: Signer<'info>,
 
+    /// CHECK: pool signer PDA, seeds `[pool]` and `pool.nonce`
     #[account(
         seeds = [
             pool.to_account_info().key.as_ref()
@@ -767,6 +770,7 @@ pub struct Stake<'info> {
     stake_from_account: Box<Account<'info, TokenAccount>>,
 
     // Program signers.
+    /// CHECK: pool signer PDA, seeds `[pool]` and `pool.nonce`
     #[account(
         seeds = [
             pool.to_account_info().key.as_ref()
@@ -818,6 +822,7 @@ pub struct Fund<'info> {
     from_b: Box<Account<'info, TokenAccount>>,
 
     // Program signers.
+    /// CHECK: pool signer PDA, seeds `[pool]` and `pool.nonce`
     #[account(
         seeds = [
             pool.to_account_info().key.as_ref()
@@ -866,6 +871,7 @@ pub struct ClaimReward<'info> {
     reward_b_account: Box<Account<'info, TokenAccount>>,
 
     // Program signers.
+    /// CHECK: pool signer PDA, seeds `[pool]` and `pool.nonce`
     #[account(
         seeds = [
             pool.to_account_info().key.as_ref()
@@ -902,6 +908,7 @@ pub struct CloseUser<'info> {
 
 #[derive(Accounts)]
 pub struct ClosePool<'info> {
+    /// CHECK: destination for lamports after closing the pool
     #[account(mut)]
     refundee: UncheckedAccount<'info>,
     #[account(mut)]
@@ -932,6 +939,7 @@ pub struct ClosePool<'info> {
     reward_a_vault: Box<Account<'info, TokenAccount>>,
     #[account(mut)]
     reward_b_vault: Box<Account<'info, TokenAccount>>,
+    /// CHECK: pool signer PDA, seeds `[pool]` and `pool.nonce`
     #[account(
         seeds = [
             pool.to_account_info().key.as_ref()

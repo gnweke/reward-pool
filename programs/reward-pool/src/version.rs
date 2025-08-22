@@ -1,11 +1,20 @@
 use crate::*;
-use borsh::{BorshDeserialize, BorshSerialize};
+#[cfg(feature = "idl-build")]
+use anchor_lang::idl::types::IdlBuild;
 
 pub const SECONDS_IN_YEAR: u64 = 365 * 24 * 60 * 60;
 
-#[derive(Clone, BorshSerialize, BorshDeserialize, PartialEq)]
+#[derive(
+    anchor_lang::prelude::AnchorSerialize,
+    anchor_lang::prelude::AnchorDeserialize,
+    Clone,
+    Copy,
+    Debug,
+    PartialEq,
+    Eq,
+)]
+#[cfg_attr(feature = "idl-build", derive(IdlBuild))]
 #[repr(u8)]
-#[derive(Debug)]
 /// A version marker for different logic pertaining to program upgrades
 pub enum PoolVersion {
     /// a V1 pool is the original math logic where rate is per second

@@ -1,5 +1,10 @@
 use crate::calculator::*;
-use spl_math::uint::U192;
+
+mod u192 {
+    use uint::construct_uint;
+    construct_uint! { pub struct U192(3); }
+}
+use u192::U192;
 
 const SECONDS_IN_YEAR: u64 = 365 * 24 * 60 * 60;
 
