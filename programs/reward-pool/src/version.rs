@@ -1,6 +1,4 @@
 use anchor_lang::prelude::*;
-#[cfg(feature = "idl-build")]
-use anchor_lang::IdlBuild;
 
 use crate::Pool;
 
@@ -16,8 +14,7 @@ pub enum PoolVersion {
     V2 = 2,
 }
 
-#[cfg(feature = "idl-build")]
-impl IdlBuild for PoolVersion {}
+
 
 impl Pool {
     /// Will upgrade the pool if an upgrade is available and able to be done
