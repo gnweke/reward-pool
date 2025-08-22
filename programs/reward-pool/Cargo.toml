@@ -17,6 +17,13 @@ test-id = []
 verbose = []
 idl-build = ["anchor-lang/idl-build", "anchor-spl/idl-build"]
 
+# Silence `unexpected cfg` warnings for these optional flags
+anchor-debug = []
+no-idl = []
+no-log-ix-name = []
+custom-heap = []
+custom-panic = []
+
 [dependencies]
 anchor-lang = "0.31"
 anchor-spl  = "0.31"

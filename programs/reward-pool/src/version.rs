@@ -1,6 +1,6 @@
 use anchor_lang::prelude::*;
 #[cfg(feature = "idl-build")]
-use anchor_lang::idl::types::IdlBuild;
+use anchor_lang::IdlBuild;
 
 use crate::Pool;
 
