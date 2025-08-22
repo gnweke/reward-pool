@@ -588,6 +588,7 @@ pub mod reward_pool {
 #[derive(Accounts)]
 #[instruction(pool_nonce: u8)]
 pub struct InitializePool<'info> {
+    #[account(mut)]
     authority: Signer<'info>,
 
     #[account(
@@ -644,10 +645,15 @@ pub struct InitializePool<'info> {
     )]
     pool_signer: UncheckedAccount<'info>,
 
-    #[account(zero)]
+    #[account(
+        init,
+        payer = authority,
+        space = 8 + std::mem::size_of::<Pool>(),
+    )]
     pool: Box<Account<'info, Pool>>,
 
     token_program: Program<'info, Token>,
+    system_program: Program<'info, System>,
 }
 
 #[derive(Accounts)]
@@ -952,7 +958,7 @@ pub struct ClosePool<'info> {
 
 #[account]
 pub struct Pool {
-    /// Priviledged account.
+    /// CHECK: Authority allowed to manage the pool. Validated in instructions.
     pub authority: Pubkey,
     /// Nonce to derive the program-derived address owning the vaults.
     pub nonce: u8,
