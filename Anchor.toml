@@ -3,8 +3,8 @@ anchor_version = "0.31.1"
 solana_version = "2.3.0"
 
 [provider]
-cluster = "localnet"
-wallet  = "/Users/$(whoami)/.config/solana/id.json"
+cluster = "Localnet"
+wallet  = "~/.config/solana/id.json"
 
 [programs.localnet]
-reward_pool = "5HfySyCkk6ApUJs658yAdtQBotQxNE3MxsA2MeLd4j5v"
+reward_pool = "SRwd1XTVscKXu9nMU8f6MfEf9cAzGPmbMe69CFmHvAH"
