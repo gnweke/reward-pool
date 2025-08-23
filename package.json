@@ -1,10 +1,12 @@
 {
   "devDependencies": {
     "@coral-xyz/anchor": "0.31.1",
-    "@solana/web3.js": "^1.95.2",
     "@solana/spl-token": "^0.4.3",
+    "@solana/web3.js": "^1.95.2",
+    "@types/node": "^24.3.0",
     "ts-mocha": "^10.0.0",
-    "typescript": "^5.0.0"
+    "ts-node": "^10.9.2",
+    "typescript": "^5.9.2"
   },
   "scripts": {
     "test": "ts-mocha -p tsconfig.json -t 1000000 programs/reward-pool/tests/**/*.ts",
