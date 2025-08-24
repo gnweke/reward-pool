@@ -1,15 +1,19 @@
 {
   "devDependencies": {
     "@coral-xyz/anchor": "0.31.1",
-    "@solana/web3.js": "^1.95.2",
+    "@solana/web3.js": "^1.98.4",
     "@solana/spl-token": "^0.4.3",
     "ts-mocha": "^10.0.0",
-    "typescript": "^5.0.0"
+    "ts-node": "^10.9.2",
+    "typescript": "^5.9.2"
   },
   "scripts": {
     "test": "ts-mocha -p tsconfig.json -t 1000000 programs/reward-pool/tests/**/*.ts",
     "predeploy:local": "node scripts/ensure-anchor-wallet.js",
-    "deploy:local": "npm run predeploy:local && anchor deploy -p reward_pool",
-    "build:local": "anchor build -p reward_pool"
+    "sync-ids": "ts-node --compiler-options '{\"module\":\"commonjs\"}' scripts/sync-program-id.ts",
+    "build:local": "npm run sync-ids && anchor build -p reward_pool",
+    "deploy:local": "npm run sync-ids && anchor deploy -p reward_pool",
+    "idl:init": "anchor idl init $(anchor keys list | awk '/reward_pool/ {print $2}') -f target/idl/reward_pool.json",
+    "idl:upgrade": "anchor idl upgrade $(anchor keys list | awk '/reward_pool/ {print $2}') -f target/idl/reward_pool.json"
   }
 }
