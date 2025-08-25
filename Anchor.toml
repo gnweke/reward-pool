@@ -7,4 +7,4 @@ cluster = "Localnet"
 wallet  = "~/.config/solana/id.json"
 
 [programs.localnet]
-reward_pool = "SRwd1XTVscKXu9nMU8f6MfEf9cAzGPmbMe69CFmHvAH"
+reward_pool = "5HfySyCkk6ApUJs658yAdtQBotQxNE3MxsA2MeLd4j5v"
