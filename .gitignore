@@ -12,3 +12,13 @@ docker-target
 soteria-linux-develop/
 .coderrect/
 testing/
+target/
+.anchor/
+**/*.log
+.env
+.DS_Store
+
+**/id.json
+keys/*.json
+keys/*.json
+**/id.json

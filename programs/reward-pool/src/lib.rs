@@ -15,7 +15,7 @@ mod version;
 #[cfg(test)]
 mod math;
 
-declare_id!("5HfySyCkk6ApUJs658yAdtQBotQxNE3MxsA2MeLd4j5v");
+declare_id!("3LZ8ztSsXSWxXE3q4bJBydasCdeX88vuVyt4qJVWGCcp");
 
 #[cfg(not(feature = "local-testing"))]
 mod constants {
